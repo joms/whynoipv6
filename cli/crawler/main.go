@@ -31,11 +31,17 @@ type Site struct {
 	Checked       bool
 	Nsv6checked   bool
 	Country       string
+	ASN           int
 }
 
 // GeoIP gets the country code from local freeip server
 type GeoIP struct {
 	CountryCode string `json:"country_code"`
+}
+
+// ASN is the response of https://iptoasn.com/
+type ASN struct {
+	ASN int `json:"as_number"`
 }
 
 // Flags
@@ -124,7 +130,7 @@ func doWork(s Site, wg *sync.WaitGroup) {
 		}
 	}
 
-	// Check country code
+	// Lookup country code
 	// Make sure you are running the freegeoip server
 	if *FlagCheckCountry == true {
 		if c := getCountryCode(s.Hostname); c != "" {
@@ -135,12 +141,20 @@ func doWork(s Site, wg *sync.WaitGroup) {
 		}
 	}
 
+	// Lookup ASN
+	if *FlagCheckASN == true {
+		if asn, err := getASN(s.Hostname); err == nil {
+			s.ASN = asn
+			db.Exec("UPDATE sites SET asn = ? WHERE id = ?", s.ASN, s.ID)
+		}
+	}
+
 	// Set domain as checked
 	s.Checked = true
 	db.Exec("UPDATE sites SET checked = ? WHERE id = ?", s.Checked, s.ID)
 
 	// Print the result
-	fmt.Printf("Rank: %v - Site: %s - IPv6: %t - NS: %t - Country: %s\n", s.Rank, s.Hostname, s.IPv6, s.NSIPv6, s.Country)
+	fmt.Printf("Rank: %v - Site: %s - IPv6: %t - NS: %t - Country: %s - ASN: %d\n", s.Rank, s.Hostname, s.IPv6, s.NSIPv6, s.Country, s.ASN)
 }
 
 // checkIPv6 checks if hostname has an AAAA record and returns true on first hit
@@ -202,6 +216,38 @@ func getCountryCode(hostname string) string {
 	}
 
 	return g.CountryCode
+}
+
+// getASN check the AS Number for the domain
+// should run your own server so we dont dos the site
+// https://github.com/jedisct1/iptoasn-webservice
+func getASN(hostname string) (int, error) {
+	// Hostname to ip lookup
+	ip, _ := net.LookupIP(hostname)
+	firstip := ip[0].String()
+
+	asn := ASN{}
+	client := http.Client{
+		Timeout: time.Second * 1,
+	}
+
+	req, err := http.NewRequest("GET", "https://api.iptoasn.com/v1/as/ip/"+firstip, nil)
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(&asn)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+	// Anti-DOS
+	time.Sleep(3 * time.Second)
+
+	return asn.ASN, nil
 }
 
 // IsIPv6 check if the string is an IP version 6.

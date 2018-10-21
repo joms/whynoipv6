@@ -21,11 +21,12 @@ CREATE TABLE sites (
     ns_ipv6 boolean DEFAULT false,
     checked boolean DEFAULT false,
     nsv6checked boolean DEFAULT false,
+    asn integer,
+    country character varying(2),
     created_at timestamp with time zone,
     updated_at timestamp with time zone,
     deleted_at timestamp with time zone,
-    ipv6_created_at timestamp with time zone,
-    country character varying(2)
+    ipv6_created_at timestamp with time zone
 );
 
 DROP TABLE IF EXISTS stats;

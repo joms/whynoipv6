@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"net"
 	"net/http"
@@ -37,6 +38,14 @@ type GeoIP struct {
 	CountryCode string `json:"country_code"`
 }
 
+// Flags
+var (
+	FlagCheckHost    = flag.Bool("domain", false, "Check the domain")
+	FlagCheckNS      = flag.Bool("nameserver", false, "Check the Nameserver")
+	FlagCheckCountry = flag.Bool("country", false, "Check CountryCode for domain")
+	FlagCheckASN     = flag.Bool("asn", false, "Get the ASN for domain")
+)
+
 func main() {
 	// Load .env file
 	envy.Load("../../.env", "$GOROOT/src/github.com/lasseh/whynoipv6/.env")
@@ -56,6 +65,9 @@ func main() {
 	defer db.Close()
 
 	//db.LogMode(true)
+
+	// Parse flags
+	flag.Parse()
 
 	var limit = 100
 	var offset = 0
@@ -96,26 +108,32 @@ func doWork(s Site, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	// Check for AAAA record
-	if checkIPv6(s.Hostname) == true {
-		s.IPv6 = true
-		s.IPv6CreatedAt = time.Now()
-		db.Exec("UPDATE sites SET ipv6 = ?, ipv6_created_at = ? WHERE id = ? AND hostname = ?", s.IPv6, s.IPv6CreatedAt, s.ID, s.Hostname)
-		//fmt.Println("Found IPv6 on: ", s.Hostname)
+	if *FlagCheckHost == true {
+		if checkIPv6(s.Hostname) == true {
+			s.IPv6 = true
+			s.IPv6CreatedAt = time.Now()
+			db.Exec("UPDATE sites SET ipv6 = ?, ipv6_created_at = ? WHERE id = ? AND hostname = ?", s.IPv6, s.IPv6CreatedAt, s.ID, s.Hostname)
+		}
 	}
 
 	// Check NS for AAAA record
-	// if checkNS(s.Hostname) == true {
-	// 	s.NSIPv6 = true
-	// 	db.Exec("UPDATE sites SET ns_ipv6 = ? WHERE id = ?", s.NSIPv6, s.ID)
-	// 	//fmt.Println("Found NS IPv6 on: ", s.Hostname)
-	// }
+	if *FlagCheckNS == true {
+		if checkNS(s.Hostname) == true {
+			s.NSIPv6 = true
+			db.Exec("UPDATE sites SET ns_ipv6 = ? WHERE id = ?", s.NSIPv6, s.ID)
+		}
+	}
 
 	// Check country code
-	// Manualy enable this if you want to check country codes every time
-	// if c := getCountryCode(s.Hostname); c != "" {
-	// 	s.Country = c
-	// 	db.Exec("UPDATE sites SET country = ? WHERE id = ?", c, s.ID)
-	// }
+	// Make sure you are running the freegeoip server
+	if *FlagCheckCountry == true {
+		if c := getCountryCode(s.Hostname); c != "" {
+			s.Country = c
+			db.Exec("UPDATE sites SET country = ? WHERE id = ?", c, s.ID)
+		} else {
+			fmt.Println("No Country found or server not running")
+		}
+	}
 
 	// Set domain as checked
 	s.Checked = true

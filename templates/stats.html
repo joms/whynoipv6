@@ -1,0 +1,69 @@
+{{ define "stats" }}
+
+<!doctype html>
+<html lang="en">
+
+{{ template "header" }}
+
+<body>
+    <main class="container">
+        <h1><a href="/" class="noline">Why No IPv6?</a></h1>
+
+        <h3>IPv6 per Country Statistics</h3>
+        <hr />
+
+        <p>
+            This is a list of the top 50 countries with IPv6 enabled
+        </p>
+            <div class="row justify-content-md-center">
+                <div class="col-md-auto">
+
+                    <table class="table table-borderless">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Country</th>
+                                <th scope="col">Sites</th>
+                                <th scope="col">Percent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {{ range .CountryStat }}
+                            <tr>
+                                <td class="site">
+                                    <img class="stats-page-flag" src="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/flags/1x1/{{ .CountryCode | ToLower }}.svg" alt="{{ .CountryName }}">
+                                    {{ .CountryName }}
+                                </td>
+                                <td class="text-right">{{ .V6sites }} / {{ .Sites }}</td>
+                                <td width="50%">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar" role="progressbar" style="width:{{.Percent}}%" aria-valuenow="{{ .Percent }}" aria-valuemin="0" aria-valuemax="100">{{.Percent}}%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{ end }}
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <hr>
+
+        <h3>Some sexy graphs of the progression of IPv6 deployment for top 1m Alexa sites</h3>
+        <hr />
+
+            <div class="row justify-content-md-center">
+                <div class="col-md-auto">
+
+                    graph here
+
+                </div>
+            </div>
+
+        {{ template "footer" }}
+    </main>
+</body>
+</html>
+{{ end }}

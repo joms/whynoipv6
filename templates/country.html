@@ -1,0 +1,123 @@
+{{ define "country" }}
+
+<!doctype html>
+<html lang="en">
+
+{{ template "header" }}
+
+<body>
+    <main class="container">
+        <h1><a href="/" class="noline">Why No IPv6?</a></h1>
+
+        <img class="country-page-flag" src="https://cdn.jsdelivr.net/npm/flag-icon-css@3.0.0/flags/4x3/{{ .Country.CountryCode | ToLower }}.svg" alt="{{ .Country.CountryName }}" />
+        <h3>The Most Popular Websites Without IPv6 In {{ .Country.CountryName }}</h3>
+        <hr />
+
+        <p>
+            Each of the following websites is sorted by Alexa rank
+            and loads over an <strong>IPv4 only</strong> connections.
+        </p>
+            <div class="row justify-content-md-center">
+                <div class="col-md-auto">
+
+                    <table class="table table-borderless">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Alexa Rank</th>
+                                <th scope="col">Website</th>
+                                <th scope="col" data-toggle="tooltip" data-placement="top" title="If the site has an AAAA record">IPv6</th>
+                                <th scope="col" data-toggle="tooltip" data-placement="top" title="If one or more of the nameserver for the site has AAAA record. 
+                                This is a required step towards proper IPv6 setup.">NS IPv6</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ range .Site }}
+                            <tr>
+                                <td class="number">{{ .Rank }}</td>
+                                <td class="site">
+                                    {{ .Hostname }}
+                                </td>
+                                <td class="icon">
+                                    {{ if .IPv6 }}
+                                    <i class="fas fa-check text-success"></i>
+                                    {{ else }}
+                                    <i class="fas fa-times text-danger"></i>
+                                    {{ end }}
+                                </td>
+                                <td class="icon">
+                                    {{ if .NSIPv6 }}
+                                    <i class="fas fa-check text-success"></i>
+                                    {{ else }}
+                                    <i class="fas fa-times text-danger"></i>
+                                    {{ end }}
+                                </td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {{ if .V6site }}
+            <hr>
+        <!-- HEROES OF THE INTERNET, WE SALUTE YOU -->
+        <h3>Heroes Of {{ .Country.CountryName }}, We Salute You!</h3>
+        <hr />
+
+        <p>
+                The following websites are dual-stacked and ready for the future!
+        </p>
+
+            <div class="row justify-content-md-center">
+                <div class="col-md-auto">
+
+                    <table class="table table-borderless">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Alexa Rank</th>
+                                <th scope="col">Website</th>
+                                <th scope="col" data-toggle="tooltip" data-placement="top" title="If the site has an AAAA record">IPv6</th>
+                                <th scope="col" data-toggle="tooltip" data-placement="top" title="If one or more of the nameserver for the site has AAAA record. 
+                                This is a required step towards proper IPv6 setup.">NS IPv6</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{ range .V6site }}
+                            <tr>
+                                <td class="number">{{ .Rank }}</td>
+                                <td class="site">
+                                    {{ .Hostname }}
+                                </td>
+                                <td class="icon">
+                                    {{ if .IPv6 }}
+                                    <i class="fas fa-check text-success"></i>
+                                    {{ else }}
+                                    <i class="fas fa-times text-danger"></i>
+                                    {{ end }}
+                                </td>
+                                <td class="icon">
+                                    {{ if .NSIPv6 }}
+                                    <i class="fas fa-check text-success"></i>
+                                    {{ else }}
+                                    <i class="fas fa-times text-danger"></i>
+                                    {{ end }}
+                                </td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        <hr>
+        <h2>Some statistics</h2>
+        <p>
+            Of the total {{ .Stats.Sites }} sites only {{ .Stats.SitesWithV6 }} ({{ .Stats.V6Percent }}%) of them have IPv6.
+        </p>
+            {{ end }}
+
+        {{ template "footer" }}
+    </main>
+</body>
+</html>
+{{ end }}

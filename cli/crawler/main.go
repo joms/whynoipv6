@@ -247,7 +247,7 @@ func getASN(hostname string) (int, error) {
 
 	fmt.Println("Lookup for:", hostname)
 	// req, err := http.NewRequest("GET", "https://api.iptoasn.com/v1/as/ip/"+firstip, nil)
-	req, err := http.NewRequest("GET", "http://localhost/v1/as/ip/"+firstip, nil)
+	req, err := http.NewRequest("GET", "http://localhost:8081/v1/as/ip/"+firstip, nil)
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err)

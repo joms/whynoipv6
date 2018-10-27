@@ -145,7 +145,7 @@ func doWork(s Site, wg *sync.WaitGroup) {
 	if *FlagCheckASN == true {
 		if asn, err := getASN(s.Hostname); err == nil {
 			s.ASN = asn
-			db.Exec("UPDATE sites SET asn = ? WHERE id = ?", s.ASN, s.ID)
+			db.Exec("UPDATE sites SET asn = ? WHERE id = ?", asn, s.ID)
 		}
 	}
 
@@ -160,7 +160,10 @@ func doWork(s Site, wg *sync.WaitGroup) {
 // checkIPv6 checks if hostname has an AAAA record and returns true on first hit
 // TODO: implement errors
 func checkIPv6(hostname string) bool {
-	ip, _ := net.LookupIP(hostname)
+	ip, err := net.LookupIP(hostname)
+	if err != nil {
+		return false
+	}
 	for i := 0; i < len(ip); i++ {
 		if IsIPv6(ip[i].String()) == true {
 			return true
@@ -171,7 +174,6 @@ func checkIPv6(hostname string) bool {
 	ip, _ = net.LookupIP(w3domain)
 	for i := 0; i < len(ip); i++ {
 		if IsIPv6(ip[i].String()) == true {
-			fmt.Println("FOUND WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", w3domain)
 			return true
 		}
 	}
@@ -180,7 +182,10 @@ func checkIPv6(hostname string) bool {
 
 // checkNS checks if the domain's NS records has IPv6 and returs true on first hit
 func checkNS(hostname string) bool {
-	ns, _ := net.LookupNS(hostname)
+	ns, err := net.LookupNS(hostname)
+	if err != nil {
+		return false
+	}
 	for y := 0; y < len(ns); y++ {
 		ip, _ := net.LookupIP(ns[y].Host)
 		for y := 0; y < len(ip); y++ {
@@ -223,15 +228,26 @@ func getCountryCode(hostname string) string {
 // https://github.com/jedisct1/iptoasn-webservice
 func getASN(hostname string) (int, error) {
 	// Hostname to ip lookup
-	ip, _ := net.LookupIP(hostname)
+	ip, err := net.LookupIP(hostname)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
 	firstip := ip[0].String()
+
+	// Check if host returns a ip
+	if len(firstip) == 0 {
+		return 0, nil
+	}
 
 	asn := ASN{}
 	client := http.Client{
 		Timeout: time.Second * 1,
 	}
 
-	req, err := http.NewRequest("GET", "https://api.iptoasn.com/v1/as/ip/"+firstip, nil)
+	fmt.Println("Lookup for:", hostname)
+	// req, err := http.NewRequest("GET", "https://api.iptoasn.com/v1/as/ip/"+firstip, nil)
+	req, err := http.NewRequest("GET", "http://localhost/v1/as/ip/"+firstip, nil)
 	resp, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err)
@@ -245,7 +261,7 @@ func getASN(hostname string) (int, error) {
 		return 0, err
 	}
 	// Anti-DOS
-	time.Sleep(3 * time.Second)
+	// time.Sleep(3 * time.Second)
 
 	return asn.ASN, nil
 }

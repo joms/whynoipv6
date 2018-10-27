@@ -12,10 +12,9 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"
 	"github.com/gobuffalo/envy"
-	"github.com/rs/cors"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/rs/cors"
 )
 
 var db *gorm.DB

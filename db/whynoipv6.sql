@@ -20,7 +20,6 @@ CREATE TABLE sites (
     ipv6 boolean DEFAULT false,
     ns_ipv6 boolean DEFAULT false,
     checked boolean DEFAULT false,
-    nsv6checked boolean DEFAULT false,
     asn integer,
     country character varying(2),
     created_at timestamp with time zone,

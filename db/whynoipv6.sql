@@ -40,6 +40,17 @@ CREATE TABLE stats (
     percent numeric(4,1) NOT NULL
 );
 
+DROP TABLE IF EXISTS asn;
+CREATE TABLE asn (
+    id SERIAL NOT NULL PRIMARY KEY,
+    asn integer NOT NULL UNIQUE,
+    asname varchar(255),
+    count_v4 integer,
+    count_v6 integer,
+	percent_v4 numeric(4,1),
+	percent_v6 numeric(4,1)
+);
+
 -- ----------------------------
 -- Indexes
 -- ----------------------------

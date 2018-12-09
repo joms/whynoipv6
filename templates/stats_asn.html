@@ -56,24 +56,5 @@
         {{ template "footer" }}
     </main>
 </body>
-<script type="text/javascript">
-    $('a').on('click', function () {
-        console.log("TESTETSATESASEG");
-        $('a').find('a.active').removeClass('active');
-        $(this).parent('a').addClass('active');
-    });
-    $("sort").click(function(){
-        alert("The paragraph was clicked.");
-    });
-    $("a").click(function() {
-        //var device = this.id;
-        //$("#sort").text(device);
-        console.log("TESTETSATESASEG");
-        
-        // Active button
-        $(this).parent().addClass('active');
-    });
-
-</script>
 </html>
 {{ end }}

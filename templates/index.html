@@ -6,6 +6,8 @@
 {{ template "header" }}
 
 <body>
+{{ template "sidebar" }}
+
     <main class="container">
         <h1><a href="/" class="noline">Why No IPv6?</a></h1>
         <p>
@@ -62,16 +64,16 @@
                                 </td>
                                 <td class="icon">
                                     {{ if .IPv6 }}
-                                    <i class="fas fa-check text-success"></i>
+                                    <i data-feather="check" class="feather-sign text-success"></i>
                                     {{ else }}
-                                    <i class="fas fa-times text-danger"></i>
+                                    <i data-feather="x" class="feather-sign text-danger"></i>
                                     {{ end }}
                                 </td>
                                 <td class="icon">
                                     {{ if .NSIPv6 }}
-                                    <i class="fas fa-check text-success"></i>
+                                    <i data-feather="check" class="feather-sign text-success"></i>
                                     {{ else }}
-                                    <i class="fas fa-times text-danger"></i>
+                                    <i data-feather="x" class="feather-sign text-danger"></i>
                                     {{ end }}
                                 </td>
                             </tr>
@@ -82,7 +84,7 @@
             </div>
 
         <hr />
-        <h2>Reports by Country</h2>
+        <h2 id="country">Reports by Country</h2>
         <p>
           Each of the following countries has a localised report of the top 50 websites without IPv6.
         </p>

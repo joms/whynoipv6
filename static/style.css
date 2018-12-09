@@ -105,7 +105,6 @@ td img {
 }
 
 .stats-page-flag {
-    width: 60px;
     border-radius: 4px
 }
 .stats-page-percent {
@@ -159,3 +158,99 @@ li {
 .noline {
     text-decoration: none !important;
 }
+
+/*
+ * Stats tables
+ */
+.v6-tables {
+    font-size: smaller;
+}
+.progress-bar {
+    background-color: #1ab394;
+    height:5px;
+    margin-bottom: 0;
+}
+.progress-small,
+.progress-small .progress-bar {
+  height: 10px;
+}
+
+.progress-text {
+    text-align: start !important;
+    font-size: smaller;
+}
+
+/*
+ * Sidebar
+ */
+
+ .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 48px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    text-align: left;
+    font-size: .875rem;
+    line-height: normal;
+    max-width: 270px;
+  }
+
+.sidebar a {
+    text-decoration: none
+}
+  
+  .sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  }
+  
+  @supports ((position: -webkit-sticky) or (position: sticky)) {
+    .sidebar-sticky {
+      position: -webkit-sticky;
+      position: sticky;
+    }
+  }
+  
+  .sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #999;
+  }
+  
+  .sidebar .nav-link.active {
+    color: #007bff;
+  }
+  
+  .sidebar .nav-link:hover .feather,
+  .sidebar .nav-link.active .feather {
+    color: inherit;
+  }
+  
+  .sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+  }
+  
+  .feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+  }
+  
+  .feather-sign {
+    width: 32px;
+    height: 32px;
+    vertical-align: text-bottom;
+    font-weight: bold;
+  }

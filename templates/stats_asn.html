@@ -1,0 +1,79 @@
+{{ define "stats_asn" }}
+
+<!doctype html>
+<html lang="en">
+
+{{ template "header" }}
+
+<body>
+{{ template "sidebar" }}
+
+    <main class="container">
+        <h1><a href="/" class="noline">Why No IPv6?</a></h1>
+        <h3>IPv6 per Autonomous System</h3>
+        <hr />
+        <p>
+            This is a list of the top 50 ASN's with sites that lacks IPv6
+        </p>
+        <div id="sorting">
+            <a class="btn btn-outline-dark noline active" href="?order=ipv4" role="button" id="sort">Order by IPv4 Count</a>
+            <a class="btn btn-outline-dark noline" href="?order=ipv6" role="button" id="sort">Order by IPv6 Count</a>
+            <a class="btn btn-outline-dark noline" href="?order=percent" role="button" id="sort">Order by IPv6 Percent</a>
+        </div>
+        <br>
+            <div class="row justify-content-md-center">
+                <div class="col-md">
+
+                    <table class="table table-borderless v6-tables">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">ASN</th>
+                                <th scope="col">Organization</th>
+                                <th scope="col">Dual-Stack Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {{ range .Asn }}
+                            <tr>
+                                <td>AS{{ .Asn }}</td>
+                                <td>{{ .Asname }}</td>
+                                <td width="50%" class="progress-text">
+                                    {{ .CountV6 }} Dual-Stack<span class="float-right">{{ .CountV4 }} IPv4 Only</span>
+                                    <div class="progress progress-small">
+                                        <div style="width: {{ .PercentV6 }}%;" class="progress-bar"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{ end }}
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        {{ template "footer" }}
+    </main>
+</body>
+<script type="text/javascript">
+    $('a').on('click', function () {
+        console.log("TESTETSATESASEG");
+        $('a').find('a.active').removeClass('active');
+        $(this).parent('a').addClass('active');
+    });
+    $("sort").click(function(){
+        alert("The paragraph was clicked.");
+    });
+    $("a").click(function() {
+        //var device = this.id;
+        //$("#sort").text(device);
+        console.log("TESTETSATESASEG");
+        
+        // Active button
+        $(this).parent().addClass('active');
+    });
+
+</script>
+</html>
+{{ end }}

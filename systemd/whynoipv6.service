@@ -1,7 +1,7 @@
 # Service file for https://whynoipv6.com
 [Unit]
 Description=WhynoIPv6.com
-After=network-online.target
+After=network-online.target postgresql-10.service
 
 [Service]
 Type=simple

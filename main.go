@@ -89,6 +89,11 @@ func main() {
 		tpl.ExecuteTemplate(w, "index", data)
 	})
 
+	// About
+	r.Get("/about", func(w http.ResponseWriter, r *http.Request) {
+		tpl.ExecuteTemplate(w, "about", nil)
+	})
+
 	// Country page
 	r.Get("/country/{countryCode}", func(w http.ResponseWriter, r *http.Request) {
 		countryCode := chi.URLParam(r, "countryCode")
@@ -108,14 +113,24 @@ func main() {
 		tpl.ExecuteTemplate(w, "country", data)
 	})
 
-	// Stats page
-	r.Get("/stats", func(w http.ResponseWriter, r *http.Request) {
+	// Stats/Country
+	r.Get("/stats/country", func(w http.ResponseWriter, r *http.Request) {
 		data := struct {
 			CountryStat []CountryStat
 		}{
 			getCountryStatList(),
 		}
-		tpl.ExecuteTemplate(w, "stats", data)
+		tpl.ExecuteTemplate(w, "stats_country", data)
+	})
+	// Stats/ASN
+	r.Get("/stats/asn", func(w http.ResponseWriter, r *http.Request) {
+		queryorder := r.URL.Query().Get("order")
+		data := struct {
+			Asn []Asn
+		}{
+			getASNList(queryorder),
+		}
+		tpl.ExecuteTemplate(w, "stats_asn", data)
 	})
 
 	// Serve static web stuff

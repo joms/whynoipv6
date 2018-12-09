@@ -5,6 +5,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/gobuffalo/envy"
@@ -69,27 +70,28 @@ func main() {
 
 	// v6 stats for all sites
 	// this will be used to generate graphs for the progression of v6 deployment
-	// var s Stats
+	var s Stats
 
-	// db.Table("sites").Where("checked = true").Count(&s.Sites)
-	// db.Table("sites").Where("checked = true AND ipv6 = true").Count(&s.Ipv6)
-	// db.Table("sites").Where("checked = true AND ns_ipv6 = true").Count(&s.Ns)
-	// db.Table("sites").Where("checked = true AND ipv6 = true AND rank < 1000").Count(&s.Topv6)
-	// db.Table("sites").Where("checked = true AND ns_ipv6 = true AND rank < 1000").Count(&s.Topns)
+	db.Table("sites").Where("checked = true").Count(&s.Sites)
+	db.Table("sites").Where("checked = true AND ipv6 = true").Count(&s.Ipv6)
+	db.Table("sites").Where("checked = true AND ns_ipv6 = true").Count(&s.Ns)
+	db.Table("sites").Where("checked = true AND ipv6 = true AND rank < 1000").Count(&s.Topv6)
+	db.Table("sites").Where("checked = true AND ns_ipv6 = true AND rank < 1000").Count(&s.Topns)
 
-	// // Calculate the percentage of sites with IPv6
-	// var v6 float64
-	// v6 = PercentOf(s.Ipv6, s.Sites)
-	// s.Percent = math.Round(v6*10) / 10
+	// Calculate the percentage of sites with IPv6
+	var v6 float64
+	v6 = PercentOf(s.Ipv6, s.Sites)
+	s.Percent = math.Round(v6*10) / 10
 
-	// // Push to database
-	// // This creates stats for the total of all sites
-	// // run this every day so we can generate graphs from the data
-	// db.Create(&s)
+	// Push to database
+	// This creates stats for the total of all sites
+	// run this every day so we can generate graphs from the data
+	db.Create(&s)
 
-	var a []Asn
-
+	//
 	// Generate stats per ASN
+	//
+	var a []Asn
 	db.Table("sites").Select("asn").Where("asn > 1").Group("asn").Find(&a)
 	for _, v := range a {
 		// Count v4 for current asn
@@ -114,6 +116,7 @@ func main() {
 
 		// Create
 		db.Table("asn").Create(v)
+		//db.Table("asn").
 	}
 
 }

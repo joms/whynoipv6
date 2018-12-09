@@ -31,7 +31,7 @@ type Country struct {
 
 func main() {
 	// Load .env file
-	envy.Load("../../.env")
+	envy.Load("../../.env", "$GOROOT/src/github.com/lasseh/whynoipv6/.env")
 
 	// Database connection
 	dsn := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable",

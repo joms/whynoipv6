@@ -44,6 +44,16 @@ type Country struct {
 	CountryCode string
 }
 
+// Asn is a aggregate of sites per as number and how many sites belong to them
+type Asn struct {
+	Asn       int
+	Asname    string
+	CountV4   int
+	CountV6   int
+	PercentV4 float64
+	PercentV6 float64
+}
+
 // getStats returns stats for all sites
 // TODO: make a view out of this
 func getStats() Stats {
@@ -136,6 +146,18 @@ func getCountryStats(countryCode string) Stats {
 func getCountryStatList() []CountryStat {
 	var s []CountryStat
 	db.Table("countries").Where("v6sites IS NOT NULL").Order("v6sites desc").Limit("50").Find(&s)
+	return s
+}
+
+func getASNList(order string) []Asn {
+	var s []Asn
+	if order == "ipv6" {
+		db.Table("asn").Where("count_v4 > 1000 and count_v6 > 1").Order("count_v6 desc").Limit("40").Find(&s)
+	} else if order == "percent" {
+		db.Table("asn").Where("count_v4 > 1000 and count_v6 > 1").Order("percent_v6 desc").Limit("40").Find(&s)
+	} else { // ipv4 order and catch all
+		db.Table("asn").Where("count_v4 > 1000 and count_v6 > 1").Order("count_v4 desc").Limit("40").Find(&s)
+	}
 	return s
 }
 

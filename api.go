@@ -15,6 +15,7 @@ func (rs apiResource) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", rs.List)                   // GET / - list all sites
+	r.Get("/country", rs.CountryList)     // GET /country - list top 50 countries without ipv6
 	r.Get("/country/{id}", rs.Country)    // GET /country/:id - list all sites for :country
 	r.Get("/stats", rs.Stats)             // GET /stats - list stats for all
 	r.Get("/stats/{id}", rs.CountryStats) // GET /stats/{id} - lists stats for country
@@ -54,6 +55,12 @@ func (rs apiResource) Country(w http.ResponseWriter, r *http.Request) {
 	// } else {
 	render.JSON(w, r, s)
 	//}
+}
+
+// List top countries without ipv6
+func (rs apiResource) CountryList(w http.ResponseWriter, r *http.Request) {
+	s := getCountryList()
+	render.JSON(w, r, s)
 }
 
 // Lists stats for all sites

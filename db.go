@@ -102,6 +102,15 @@ func getCountry(countryCode string) []Site {
 	return s
 }
 
+// getCountryList returns a list of the top 50 cointries without IPv6
+func getCountryList() []CountryStat {
+	var s []CountryStat
+	if err := db.Table("countries").Where("sites > 1 and v6sites > 1").Limit(50).Order("sites").Find(&s).Error; err != nil {
+		return nil
+	}
+	return s
+}
+
 // getCountryV6 returns a list of the top 50 sites with IPv6 for a given country code
 func getCountryV6(countryCode string) []Site {
 	var s []Site

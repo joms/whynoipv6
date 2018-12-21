@@ -46,7 +46,7 @@ func main() {
 	// Basic CORS
 	cors := cors.New(cors.Options{
 		// AllowedOrigins: []string{"https://whynoipv6.com","https://ipv6.fail"}, // Use this to allow specific origin hosts
-		AllowedOrigins: []string{""},
+		AllowedOrigins: []string{"*"},
 		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
 		AllowedMethods: []string{"GET"},
 		//AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},

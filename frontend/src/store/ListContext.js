@@ -9,10 +9,23 @@ class ListProvider extends React.Component {
         sites: [],
         isFetching: 0,
         error: null,
+        _didFetch: false,
     };
 
+    componentDidMount() {
+        this.debounce = window.setTimeout(() => {
+            if (!this.state._didFetch) {
+                this.fetchList();
+            }
+        }, 1500);
+    }
+
+    componentWillUnmount() {
+        this.debounce && window.clearTimeout(this.debounce);
+    }
+
     fetchList = () => {
-        this.setState({ isFetching: this.state.isFetching + 1 });
+        this.setState({ isFetching: this.state.isFetching + 1, _didFetch: true });
         apiFetch()
             .then(sites => this.setState({ sites, isFetching: this.state.isFetching - 1 }))
             .catch(error => this.setState({ error, isFetching: this.state.isFetching - 1 }));

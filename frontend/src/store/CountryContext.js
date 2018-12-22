@@ -9,10 +9,23 @@ class CountryProvider extends React.Component {
         countries: [],
         isFetching: 0,
         error: null,
+        _didFetch: false,
     };
 
+    componentDidMount() {
+        this.debounce = window.setTimeout(() => {
+            if (!this.state._didFetch) {
+                this.fetchCountries();
+            }
+        }, 1500);
+    }
+
+    componentWillUnmount() {
+        this.debounce && window.clearTimeout(this.debounce);
+    }
+
     fetchCountries = () => {
-        this.setState({ isFetching: this.state.isFetching + 1 });
+        this.setState({ isFetching: this.state.isFetching + 1, _didFetch: true });
         apiFetch('/country')
             .then(countries => this.setState({ countries, isFetching: this.state.isFetching - 1 }))
             .catch(error => this.setState({ error, isFetching: this.state.isFetching - 1 }));

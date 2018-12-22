@@ -8,13 +8,13 @@ class CountryList extends React.Component {
     static contextType = CountryContext;
 
     componentDidMount() {
-        if (!this.context.countries.length && !this.context.isFetching) {
+        if (!this.context._didFetch) {
             this.context.fetchCountries();
         }
     }
 
     render() {
-        return this.context.countries
+        return Object.values(this.context.countries)
             .sort((a, b) => {
                 const nameA = a.CountryCode;
                 const nameB = b.CountryCode;

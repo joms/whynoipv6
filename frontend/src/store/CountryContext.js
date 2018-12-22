@@ -1,12 +1,13 @@
 import React from 'react';
 import { apiFetch } from '../utils/api';
+import { arrayNormalizer } from '../utils/normalizers';
 
 let CountryContext;
 const { Provider, Consumer } = (CountryContext = React.createContext());
 
 class CountryProvider extends React.Component {
     state = {
-        countries: [],
+        countries: {},
         isFetching: 0,
         error: null,
         _didFetch: false,
@@ -27,13 +28,38 @@ class CountryProvider extends React.Component {
     fetchCountries = () => {
         this.setState({ isFetching: this.state.isFetching + 1, _didFetch: true });
         apiFetch('/country')
-            .then(countries => this.setState({ countries, isFetching: this.state.isFetching - 1 }))
+            .then(countries =>
+                this.setState({
+                    countries: arrayNormalizer(countries, 'CountryCode'),
+                    isFetching: this.state.isFetching - 1,
+                })
+            )
+            .catch(error => this.setState({ error, isFetching: this.state.isFetching - 1 }));
+    };
+
+    fetchCountry = countryCode => {
+        this.setState({ isFetching: this.state.isFetching + 1, _didFetch: true });
+        apiFetch('/country/' + countryCode)
+            .then(sites =>
+                this.setState({
+                    countries: {
+                        ...this.state.countries,
+                        [countryCode.toUpperCase()]: {
+                            ...this.state.countries[countryCode.toUpperCase()],
+                            sites,
+                        },
+                    },
+                    isFetching: this.state.isFetching - 1,
+                })
+            )
             .catch(error => this.setState({ error, isFetching: this.state.isFetching - 1 }));
     };
 
     render() {
         return (
-            <Provider value={{ ...this.state, fetchCountries: this.fetchCountries }}>{this.props.children}</Provider>
+            <Provider value={{ ...this.state, fetchCountries: this.fetchCountries, fetchCountry: this.fetchCountry }}>
+                {this.props.children}
+            </Provider>
         );
     }
 }

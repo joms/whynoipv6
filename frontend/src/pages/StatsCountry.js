@@ -9,7 +9,7 @@ class StatsCountry extends React.Component {
     };
 
     componentDidMount() {
-        if (!this.context.countries.length && !this.context.countries.isFetching) {
+        if (!this.context._didFetch) {
             this.context.fetchCountries();
         }
     }
@@ -20,7 +20,7 @@ class StatsCountry extends React.Component {
 
     get sortCountries() {
         const key = this.state.sortBy;
-        return this.context.countries.sort((a, b) => {
+        return Object.values(this.context.countries).sort((a, b) => {
             return b[key] - a[key];
         });
     }

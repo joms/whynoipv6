@@ -1,2 +1,6 @@
 .env
 tmp/
+dist/
+yarn-error.log
+.cache/
+node_modules/

@@ -8,7 +8,7 @@ class CountryList extends React.Component {
     static contextType = CountryContext;
 
     componentDidMount() {
-        if (!this.context.countries.length) {
+        if (!this.context.countries.length && !this.context.isFetching) {
             this.context.fetchCountries();
         }
     }

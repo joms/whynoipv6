@@ -2,13 +2,14 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import CountryList from '../components/CountryList';
-import {ListContext} from "../store/ListContext";
+import { ListContext } from '../store/ListContext';
+import StatsSummary from '../components/StatsSummary';
 
 class Main extends React.Component {
     static contextType = ListContext;
 
     componentDidMount() {
-        if (!this.context.sites.length) {
+        if (!this.context.sites.length && !this.context.isFetching) {
             this.context.fetchList();
         }
     }
@@ -16,11 +17,6 @@ class Main extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <h1>
-                    <Link to="/" className="noline">
-                        Why No IPv6?
-                    </Link>
-                </h1>
                 <p>
                     It’s currently 2018 and it has been nearly 25 years since the work began on the IPv6 protocol
                     specifications. We have come a long way since then, surpassing milestones like allocating the last,
@@ -45,13 +41,7 @@ class Main extends React.Component {
                 <hr />
 
                 <h2>Some statistics</h2>
-                <p>
-                    Out of the top 1000 Alexa sites, only {'.Stats.Top1kV6'} has IPv6 enabled, and {'.Stats.Top1kNSV6'}{' '}
-                    of them use nameservers with IPv6 enabled.
-                    <br />
-                    Of the total {'.Stats.Sites'} sites only {'.Stats.V6Percent'}% of them have IPv6. This is a huge
-                    shame!
-                </p>
+                <StatsSummary />
                 <hr />
                 <div className="row justify-content-md-center">
                     <div className="col-md-auto">

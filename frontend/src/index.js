@@ -7,13 +7,16 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import App from './App';
 import { CountryProvider } from './store/CountryContext';
 import { ListProvider } from './store/ListContext';
+import { StatsProvider } from './store/StatsContext';
 
 render(
-    <ListProvider>
-        <CountryProvider>
-            <App />
-        </CountryProvider>
-    </ListProvider>,
+    <StatsProvider>
+        <ListProvider>
+            <CountryProvider>
+                <App />
+            </CountryProvider>
+        </ListProvider>
+    </StatsProvider>,
     document.getElementById('root')
 );
 

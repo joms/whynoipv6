@@ -16,21 +16,21 @@ class CountryList extends React.Component {
     render() {
         return Object.values(this.context.countries)
             .sort((a, b) => {
-                const nameA = a.CountryCode;
-                const nameB = b.CountryCode;
+                const nameA = a.countrycode;
+                const nameB = b.countrycode;
                 if (nameA < nameB) return -1;
                 if (nameA > nameB) return 1;
                 return 0;
             })
             .map(country => (
-                <Link to={`${this.props.url}/${country.CountryCode.toLowerCase()}`} key={country.CountryCode}>
+                <Link to={`${this.props.url}/${country.countrycode.toLowerCase()}`} key={country.countrycode}>
                     <LazyLoad debounce={false} offsetVertical={500}>
                         <img
-                            src={`https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/flags/4x3/${country.CountryCode.toLowerCase()}.svg`}
-                            alt={country.CountryName}
+                            src={`https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/flags/4x3/${country.countrycode.toLowerCase()}.svg`}
+                            alt={country.countryname}
                         />
                     </LazyLoad>
-                    {country.CountryCode}
+                    {country.countrycode}
                 </Link>
             ));
     }

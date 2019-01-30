@@ -6,7 +6,9 @@ const { Provider, Consumer } = (StatsContext = React.createContext());
 
 class StatsProvider extends React.Component {
     state = {
-        stats: {},
+        stats: {
+            all: {},
+        },
         isFetching: 0,
         error: null,
         _didFetch: false,
@@ -26,8 +28,16 @@ class StatsProvider extends React.Component {
 
     fetchStats = () => {
         this.setState({ isFetching: this.state.isFetching + 1, _didFetch: true });
-        apiFetch('/stats')
-            .then(stats => this.setState({ stats, isFetching: this.state.isFetching - 1 }))
+        apiFetch('/stats/country')
+            .then(all =>
+                this.setState({
+                    stats: {
+                        ...this.state.stats,
+                        all,
+                    },
+                    isFetching: this.state.isFetching - 1,
+                })
+            )
             .catch(error => this.setState({ error, isFetching: this.state.isFetching - 1 }));
     };
 

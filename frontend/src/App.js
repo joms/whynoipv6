@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 
 const MainPage = lazy(() => import('./pages/Main'));
+const Country = lazy(() => import('./pages/Country'));
 const StatsCountry = lazy(() => import('./pages/StatsCountry'));
-const StatsAsn = lazy(() => import('./pages/StatsAsn'));
+const Asn = lazy(() => import('./pages/Asn'));
 const About = lazy(() => import('./pages/About'));
 
 const App = () => {
@@ -24,8 +25,9 @@ const App = () => {
                             <Switch>
                                 <Suspense fallback={<div>Loading...</div>}>
                                     <Route exact path="/" component={MainPage} />
-                                    <Route exact path="/stats/country" component={StatsCountry} />
-                                    <Route exact path="/stats/asn" component={StatsAsn} />
+                                    <Route exact path="/country" component={Country} />
+                                    <Route exact path="/country/:countryCode" component={StatsCountry} />
+                                    <Route exact path="/stats/asn" component={Asn} />
                                     <Route exact path="/about" component={About} />
                                 </Suspense>
                                 <Route component={() => <h1>404</h1>} />

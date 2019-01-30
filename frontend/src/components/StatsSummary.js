@@ -11,7 +11,7 @@ class StatsSummary extends React.Component {
     }
 
     render() {
-        if (!Object.keys(this.context.stats).length) {
+        if (!Object.keys(this.context.stats.all).length) {
             return <React.Fragment />;
         }
 
@@ -19,10 +19,11 @@ class StatsSummary extends React.Component {
 
         return (
             <p>
-                Out of the top 1000 Alexa sites, only {stats.top_1k_v6} has IPv6 enabled, and {stats.top_1k_v6} of them
-                use name servers with IPv6 enabled.
+                Out of the top 1000 Alexa sites, only {stats.all.top_1k_v6} has IPv6 enabled, and {stats.all.top_1k_v6}{' '}
+                of them use name servers with IPv6 enabled.
                 <br />
-                Of the total {stats.sites} sites only {stats.v6_percent}% of them have IPv6. This is a huge shame!
+                Of the total {stats.all.sites} sites only {stats.all.percent_v6}% of them have IPv6. This is a huge
+                shame!
             </p>
         );
     }

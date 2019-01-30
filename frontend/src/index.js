@@ -8,12 +8,15 @@ import App from './App';
 import { CountryProvider } from './store/CountryContext';
 import { ListProvider } from './store/ListContext';
 import { StatsProvider } from './store/StatsContext';
+import { AsnProvider } from './store/AsnContext';
 
 render(
     <StatsProvider>
         <ListProvider>
             <CountryProvider>
-                <App />
+                <AsnProvider>
+                    <App />
+                </AsnProvider>
             </CountryProvider>
         </ListProvider>
     </StatsProvider>,

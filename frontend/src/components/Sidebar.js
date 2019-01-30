@@ -44,7 +44,7 @@ const Sidebar = ({ history, match, location }) => {
                 </h6>
                 <ul className="nav flex-column mb-2">
                     <li className="nav-item">
-                        <NavLink className="nav-link" to="/stats/country">
+                        <NavLink className="nav-link" to="/country">
                             <Icon icon="file-alt" />
                             By Country
                         </NavLink>

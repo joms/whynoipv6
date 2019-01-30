@@ -25,12 +25,13 @@ class CountryProvider extends React.Component {
         this.debounce && window.clearTimeout(this.debounce);
     }
 
+    // TODO This must merge if called in retrospect
     fetchCountries = () => {
         this.setState({ isFetching: this.state.isFetching + 1, _didFetch: true });
         apiFetch('/country')
             .then(countries =>
                 this.setState({
-                    countries: arrayNormalizer(countries, 'CountryCode'),
+                    countries: arrayNormalizer(countries, 'countrycode'),
                     isFetching: this.state.isFetching - 1,
                 })
             )
@@ -38,15 +39,15 @@ class CountryProvider extends React.Component {
     };
 
     fetchCountry = countryCode => {
-        this.setState({ isFetching: this.state.isFetching + 1, _didFetch: true });
+        this.setState({ isFetching: this.state.isFetching + 1 });
         apiFetch('/country/' + countryCode)
-            .then(sites =>
+            .then(site_stats =>
                 this.setState({
                     countries: {
                         ...this.state.countries,
                         [countryCode.toUpperCase()]: {
                             ...this.state.countries[countryCode.toUpperCase()],
-                            sites,
+                            site_stats,
                         },
                     },
                     isFetching: this.state.isFetching - 1,

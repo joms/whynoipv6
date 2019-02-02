@@ -24,7 +24,7 @@ class Main extends React.Component {
                     a fraction of the top one million websites today is IPv6-compliant.
                 </p>
                 <p>
-                    So today we need to start shaming.
+                    So today we need to start shaming.{' '}
                     <strong>Shame! Shame! Shame!</strong>
                     <br /> Prepare for the future, dual-stack today!
                     <br />

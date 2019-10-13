@@ -1,3 +1,5 @@
+@import './sidebar';
+
 footer {
     padding-top: 3rem;
     padding-bottom: 3rem;
@@ -83,7 +85,7 @@ td img {
     white-space: nowrap;
     display: inline-block;
     width: 90px;
-    text-align: left;
+    text-align: center;
 }
 
 .countries img {
@@ -171,65 +173,4 @@ li {
 .progress-text {
     text-align: start !important;
     font-size: smaller;
-}
-
-/*
- * Sidebar
- */
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 100; /* Behind the navbar */
-    padding: 48px 0 0; /* Height of navbar */
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-    text-align: left;
-    font-size: 0.875rem;
-    line-height: normal;
-    max-width: 270px;
-
-    a {
-        text-decoration: none;
-    }
-
-    .nav-link {
-        font-weight: 500;
-        color: #333;
-
-        &.active {
-            color: #007bff;
-        }
-    }
-
-    .fas, .far, .fab {
-        padding-right: .5rem;
-    }
-
-    &-sticky {
-        position: relative;
-        top: 0;
-        height: calc(100vh - 48px);
-        padding-top: 0.5rem;
-        overflow-x: hidden;
-        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    }
-
-    &-heading {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-    }
-}
-
-@supports ((position: -webkit-sticky) or (position: sticky)) {
-    .sidebar-sticky {
-        position: -webkit-sticky;
-        position: sticky;
-    }
-}
-
-.sidebar .nav-link .feather {
-    margin-right: 4px;
-    color: #999;
 }

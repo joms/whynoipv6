@@ -1,6 +1,7 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
+import Icon from './components/Icon';
 
 const MainPage = lazy(() => import('./pages/Main'));
 const Country = lazy(() => import('./pages/Country'));
@@ -9,13 +10,34 @@ const Asn = lazy(() => import('./pages/Asn'));
 const About = lazy(() => import('./pages/About'));
 
 const App = () => {
+    const [showMenu, setShowMenu] = useState(false);
+
+    const toggleMenu = () => setShowMenu(!showMenu);
+
+    const hideMenuCond = () => (showMenu ? setShowMenu(false) : null);
+
     return (
         <Router>
-            <div className="container-fluid">
-                <div className="row">
-                    <Sidebar />
+            <div id="wrapper" className={`${showMenu ? 'toggled' : ''}`}>
+                <div className="d-flex">
+                    <div id="sidebar-wrapper" className="bg-light">
+                        <Sidebar onClick={hideMenuCond} />
+                    </div>
 
-                        <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <div id="page-content-wrapper" className="mt-4 container" onClick={hideMenuCond}>
+                        <button
+                            className="btn btn-dark d-md-none"
+                            onClick={toggleMenu}
+                            style={{
+                                position: 'absolute',
+                                top: '1rem',
+                                right: '1rem',
+                            }}
+                        >
+                            <Icon icon="bars" />
+                        </button>
+
+                        <main role="main">
                             <h1>
                                 <Link to="/" className="noline">
                                     Why No IPv6?
@@ -34,12 +56,13 @@ const App = () => {
                             </Switch>
                         </main>
 
-                        <footer className="col-md-9 ml-sm-auto col-lg-10 px-4">
+                        <footer>
                             <p>
                                 Built by <a href="https://twitter.com/hasselaugen">Lasse Haugen</a> with data from{' '}
                                 <a href="https://crawler.ninja/">crawler.ninja</a>
                             </p>
                         </footer>
+                    </div>
                 </div>
             </div>
         </Router>
